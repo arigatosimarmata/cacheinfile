@@ -1,4 +1,4 @@
-# go-cacheinfile
+# go cacheinfile
 
 > Fast arbitrary data caching to tmp files in Go
 
@@ -25,7 +25,7 @@ func main() {
 	key := "foo"
 	data := []byte("bar") // can be of any time
 	expire := 1 * time.Hour
-	cachedirectory := time.Now().Format("20060102")
+	cachedirectory := time.Now().Format("20060102")//set directory date or anything
 
 	// caching data
 	err := cacheinfile.Set(cachedirectory, key, data, expire)

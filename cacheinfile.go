@@ -19,7 +19,9 @@ const cachedir = "./cache/"
 func Set(cache_directory string, key string, data interface{}, expire time.Duration) error {
 	key = regexp.MustCompile("[^a-zA-Z0-9_-]"+"[\\.]").ReplaceAllLiteralString(key, "")
 	// file := fmt.Sprintf("fcache.%s.%v", key, strconv.FormatInt(time.Now().Add(expire).Unix(), 10))
-	file := fmt.Sprintf("fcache.%s.%v", key, time.Now().Add(expire).Format("20060102"))
+	// file := fmt.Sprintf("fcache.%s.%v", key, time.Now().Add(expire).Format("20060102"))
+	file := fmt.Sprintf("fcache.%s", key)
+
 	fpath := filepath.Join(cachedir+cache_directory, file)
 
 	if _, err := os.Stat(cachedir + cache_directory); os.IsNotExist(err) {
@@ -54,7 +56,8 @@ func Set(cache_directory string, key string, data interface{}, expire time.Durat
 // Get reads item from cache
 func Get(cache_directory string, key string, dst interface{}) (bool, error) {
 	key = regexp.MustCompile("[^a-zA-Z0-9_-]").ReplaceAllLiteralString(key, "")
-	pattern := filepath.Join(cachedir+cache_directory, fmt.Sprintf("fcache.%s.*", key))
+	// pattern := filepath.Join(cachedir+cache_directory, fmt.Sprintf("fcache.%s.*", key))
+	pattern := filepath.Join(cachedir+cache_directory, fmt.Sprintf("fcache.%s", key))
 	files, err := filepath.Glob(pattern)
 	if err != nil {
 		return false, err
@@ -93,7 +96,8 @@ func Get(cache_directory string, key string, dst interface{}) (bool, error) {
 
 // clean removes item from cache
 func clean(key string) error {
-	pattern := filepath.Join(cachedir, fmt.Sprintf("fcache.%s.*", key))
+	// pattern := filepath.Join(cachedir, fmt.Sprintf("fcache.%s.*", key))
+	pattern := filepath.Join(cachedir, fmt.Sprintf("fcache.%s", key))
 	files, _ := filepath.Glob(pattern)
 	for _, file := range files {
 		if _, err := os.Stat(file); err == nil {

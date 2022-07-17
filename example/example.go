@@ -3,16 +3,16 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	cacheinfile "github.com/arigatosimarmata/cacheinfile"
 )
 
 func main() {
-	fmt.Println("Testing")
-
 	key := "foo"
-	data := []byte("bar") // can be of any time
+	// data := []byte("bar") // can be of any time
+	data := "1;20;20220717" // can be of any time
 	expire := 1 * time.Hour
 	cachedirectory := time.Now().Format("20060102")
 
@@ -23,12 +23,29 @@ func main() {
 	}
 
 	// reading cached data
-	var dst []byte
-	found, err := cacheinfile.Get(cachedirectory, key, &dst)
+	var dst string
+	found, dat, err := cacheinfile.Get(cachedirectory, key, dst)
 	if err != nil {
 		log.Fatal(err)
 	}
 	if found {
-		fmt.Println(string(dst)) // "bar"
+		fmt.Println(dat) // "bar"
+		sample_split := strings.Split(dat, ";")
+		data1 := sample_split[0]
+		data2 := sample_split[1]
+		data3 := sample_split[2]
+
+		fmt.Printf("Printf %s - %s - %s \n", data1, data2, data3)
+
+		if data1 == "1" {
+			//update data
+			data1 = "12"
+
+			data_in := data1 + ";" + data2 + ";" + data3
+			err := cacheinfile.Set(cachedirectory, key, data_in, expire)
+			if err != nil {
+				fmt.Printf("err %s : \n", err)
+			}
+		}
 	}
 }

@@ -14,7 +14,7 @@ func main() {
 	// data := []byte("bar") // can be of any time
 	data := "1;20;20220717" // can be of any time
 	expire := 1 * time.Hour
-	cachedirectory := time.Now().Format("20060102")
+	cachedirectory := "/home/lawencon/application-log/cache-dir/" + time.Now().Format("20060102")
 
 	// caching data
 	err := cacheinfile.Set(cachedirectory, key, data, expire)

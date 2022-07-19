@@ -10,22 +10,22 @@ import (
 	"time"
 )
 
-const cachedir = "./cache/"
+const cachedir = "cache/"
 
 // Set writes item to cache
 func Set(cache_directory string, key string, data string, expire time.Duration) error {
 	key = regexp.MustCompile("[^a-zA-Z0-9_-]"+"[\\.]").ReplaceAllLiteralString(key, "")
 	file := fmt.Sprintf("fcache.%s", key)
 
-	fpath := filepath.Join(cachedir+cache_directory, file)
+	fpath := filepath.Join(cache_directory, file)
 
-	if _, err := os.Stat(cachedir + cache_directory); os.IsNotExist(err) {
-		if err := os.Mkdir(cachedir+cache_directory, 0755); err != nil {
+	if _, err := os.Stat(cache_directory); os.IsNotExist(err) {
+		if err := os.MkdirAll(cache_directory, 0755); err != nil {
 			log.Fatal(err)
 		}
 	}
 
-	clean(key)
+	clean(cache_directory, key)
 
 	var fmutex sync.RWMutex
 	fmutex.Lock()
@@ -46,7 +46,7 @@ func Set(cache_directory string, key string, data string, expire time.Duration) 
 // Get reads item from cache
 func Get(cache_directory string, key string, dst string) (bool, string, error) {
 	key = regexp.MustCompile("[^a-zA-Z0-9_-]").ReplaceAllLiteralString(key, "")
-	pattern := filepath.Join(cachedir+cache_directory, fmt.Sprintf("fcache.%s", key))
+	pattern := filepath.Join(cache_directory, fmt.Sprintf("fcache.%s", key))
 	files, err := filepath.Glob(pattern)
 	if err != nil {
 		return false, "", err
@@ -75,8 +75,8 @@ func Get(cache_directory string, key string, dst string) (bool, string, error) {
 }
 
 // clean removes item from cache
-func clean(key string) error {
-	pattern := filepath.Join(cachedir, fmt.Sprintf("fcache.%s", key))
+func clean(cache_directory, key string) error {
+	pattern := filepath.Join(cache_directory, fmt.Sprintf("fcache.%s", key))
 	files, _ := filepath.Glob(pattern)
 	for _, file := range files {
 		if _, err := os.Stat(file); err == nil {

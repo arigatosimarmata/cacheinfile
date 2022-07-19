@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const cachedir = "cache/"
+// const cachedir = "cache/"
 
 // Set writes item to cache
 func Set(cache_directory string, key string, data string, expire time.Duration) error {

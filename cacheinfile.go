@@ -32,23 +32,16 @@ func Set(cache_directory string, key string, data string, expire time.Duration) 
 	defer fmutex.Unlock()
 	fp, err := os.OpenFile(fpath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
-		if err2 := fp.Close(); err2 != nil {
-			return err2
-		}
 		return err
 	}
 
 	defer fp.Close()
 	if _, err = fp.WriteString(data); err != nil {
-		if err2 := fp.Close(); err2 != nil {
-			return err2
-		}
+		fp.Close()
 		return err
 	}
 
-	if err2 := fp.Close(); err2 != nil {
-		return nil
-	}
+	fp.Close()
 	return nil
 }
 
@@ -70,25 +63,18 @@ func Get(cache_directory string, key string, dst string) (bool, string, error) {
 
 	fp, err := os.OpenFile(files[0], os.O_RDONLY, 0400)
 	if err != nil {
-		if err2 := fp.Close(); err2 != nil {
-			return false, "", err2
-		}
 		return false, "", err
 	}
 	defer fp.Close()
 
 	datafile, err := os.ReadFile(files[0]) // just pass the file name
 	if err != nil {
-		if err2 := fp.Close(); err2 != nil {
-			return false, "", err2
-		}
+		fp.Close()
 		return false, "", err
 	}
 
 	data_out := string(datafile)
-	if err2 := fp.Close(); err2 != nil {
-		return true, data_out, nil
-	}
+	fp.Close()
 	return true, data_out, nil
 }
 

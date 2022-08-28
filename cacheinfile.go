@@ -25,7 +25,7 @@ func Set(cache_directory string, key string, data string, expire time.Duration) 
 		}
 	}
 
-	clean(cache_directory, key)
+	// clean(cache_directory, key)
 
 	var fmutex sync.RWMutex
 	fmutex.Lock()
@@ -79,14 +79,14 @@ func Get(cache_directory string, key string, dst string) (bool, string, error) {
 }
 
 // clean removes item from cache
-func clean(cache_directory, key string) error {
-	pattern := filepath.Join(cache_directory, fmt.Sprintf("fcache.%s", key))
-	files, _ := filepath.Glob(pattern)
-	for _, file := range files {
-		if _, err := os.Stat(file); err == nil {
-			os.Remove(file)
-		}
-	}
+// func clean(cache_directory, key string) error {
+// 	pattern := filepath.Join(cache_directory, fmt.Sprintf("fcache.%s", key))
+// 	files, _ := filepath.Glob(pattern)
+// 	for _, file := range files {
+// 		if _, err := os.Stat(file); err == nil {
+// 			os.Remove(file)
+// 		}
+// 	}
 
-	return nil
-}
+// 	return nil
+// }

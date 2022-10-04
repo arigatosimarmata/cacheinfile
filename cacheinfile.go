@@ -1,7 +1,6 @@
 package cacheinfile
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -15,7 +14,8 @@ import (
 // Set writes item to cache
 func Set(cache_directory string, key string, data string, expire time.Duration) error {
 	key = regexp.MustCompile("[^a-zA-Z0-9_-]"+"[\\.]").ReplaceAllLiteralString(key, "")
-	file := fmt.Sprintf("fcache.%s", key)
+	// file := fmt.Sprintf("fcache.%s", key)
+	file := key
 
 	fpath := filepath.Join(cache_directory, file)
 
@@ -48,7 +48,8 @@ func Set(cache_directory string, key string, data string, expire time.Duration) 
 // Get reads item from cache
 func Get(cache_directory string, key string, dst string) (bool, string, error) {
 	key = regexp.MustCompile("[^a-zA-Z0-9_-]").ReplaceAllLiteralString(key, "")
-	pattern := filepath.Join(cache_directory, fmt.Sprintf("fcache.%s", key))
+	// pattern := filepath.Join(cache_directory, fmt.Sprintf("fcache.%s", key))
+	pattern := filepath.Join(cache_directory, key)
 	files, err := filepath.Glob(pattern)
 	if err != nil {
 		return false, "", err

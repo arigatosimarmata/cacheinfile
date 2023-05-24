@@ -22,6 +22,7 @@ import (
 )
 
 func main() {
+	// update new flow for go package
 	key := "foo"
 	data := []byte("bar") // can be of any time
 	expire := 1 * time.Hour

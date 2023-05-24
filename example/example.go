@@ -19,7 +19,7 @@ func main() {
 	// caching data
 	err := cacheinfile.Set(cachedirectory, key, data, expire)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Error : ", err)
 	}
 
 	// reading cached data

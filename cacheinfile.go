@@ -24,7 +24,7 @@ func Set(cache_directory string, key string, data string, expire time.Duration) 
 
 	filepath := cache_directory + "/" + file
 	if _, err := os.Stat(filepath); os.IsNotExist(err) {
-		fp, err := os.Create(file)
+		fp, err := os.Create(filepath)
 		if err != nil {
 			fp.Close()
 			log.Fatal("ERROR CREATE FILE : ", err)
